@@ -8,6 +8,7 @@ import {
   registerApi,
 } from '../../api/authApi';
 import SecureStorage from '../../utils/SecureStorage';
+import { toast } from 'react-toastify';
 
 
 
@@ -21,8 +22,12 @@ export const login = createAsyncThunk(
       const response = await loginApi({ email, password });
       console.log(response, '====')
       setLoginData(response.access_token);
+      toast.success('Login Successful!')
+
       return response;
     } catch (error: any) {
+      toast.error('Login Failed!')
+
       return rejectWithValue(error.response?.data?.message || 'Login failed');
     }
   },
@@ -37,8 +42,12 @@ export const register = createAsyncThunk(
     try {
       const response = await registerApi({ username, email, password });
       // setLoginData(response.access_token, response.refreshToken);
+      toast.success('Registration Successful!')
+
       return response;
     } catch (error: any) {
+      toast.error('Registration Failed!')
+
       return rejectWithValue(error.response?.data?.message || 'Login failed');
     }
   },

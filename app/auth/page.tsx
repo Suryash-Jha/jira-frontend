@@ -10,6 +10,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { AppDispatch } from "@/redux/store";
 import { login, register} from "@/features/auth/authActions";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 export default function AuthPage() {
     const dispatch= useDispatch<AppDispatch>();
@@ -20,12 +22,12 @@ export default function AuthPage() {
   };
   
 
-    const handleLogin= (event: any): void => {
+    const handleLogin= async (event: any): Promise<any> => {
         const body={
             email: formData.email,
             password: formData.password
         }
-        dispatch(login(body));
+        await dispatch(login(body));
         console.log("Login", formData);
         // throw new Error("Function not implemented.");
     }
@@ -78,6 +80,7 @@ export default function AuthPage() {
             </TabsContent>
           </Tabs>
         </Card>
+        <ToastContainer />
       </motion.div>
     </div>
   );
