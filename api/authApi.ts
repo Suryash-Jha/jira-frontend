@@ -10,7 +10,7 @@ export const loginApi = async (data: {
   return response.data;
 };
 export const registerApi = async (data: {
-  username: string;
+  fullName: string;
   email: string;
   password: string;
 }) => {

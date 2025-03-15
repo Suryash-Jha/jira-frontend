@@ -6,21 +6,10 @@ import { Layout } from "@/components/layout"
 import { ProjectBoard } from "@/components/project-board"
 import { useState } from "react"
 import CreateTaskModal from "@/components/CreateTaskModal"
-import { Task } from "@/interfaces/tasks"
 
 export default function Home() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [formData, setFormData] = useState<Task>({
-    title: "",
-    priority: 1,
-    description: "",
-    status: "pending",
-    dueDate: "",
-    createdBy: "",
-    createdByEmail: "",
-    assignedTo: "",
-    assignedToEmail: "",
-  });
+  
   return (
     <Layout>
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -35,8 +24,7 @@ export default function Home() {
         <CreateTaskModal 
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        formData={formData}
-        setFormData={setFormData}
+       
         />
       </div>
     </Layout>

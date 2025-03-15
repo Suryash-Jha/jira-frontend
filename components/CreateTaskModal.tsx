@@ -7,20 +7,32 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { createTask } from "@/features/task/taskActions";
+import { Task } from "@/interfaces/tasks";
+import SecureStorage from "@/utils/SecureStorage";
 interface Props {
   isOpen: any;
   setIsOpen: any;
-  formData: any;
-  setFormData: any;
+  
 }
 const CreateTaskModal: React.FC<Props> = ({
   isOpen,
   setIsOpen,
-  formData,
-  setFormData,
+  
 }) => {
 
   const dispatch= useDispatch<AppDispatch>();
+  const [formData, setFormData] = useState<Task>({
+      title: "",
+      priority: 1,
+      description: "",
+      status: "pending",
+      dueDate: "",
+      createdBy: "",
+      createdByEmail: "",
+      assignedTo: "",
+      assignedToEmail: "",
+    });
+
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({
@@ -30,11 +42,19 @@ const CreateTaskModal: React.FC<Props> = ({
   };
 
   const handleSubmit = () => {
-    // setFormData(...formData, {
+    const decoded:any= SecureStorage.getItem('decoded')
 
-    // })
-    dispatch(createTask(formData))
-    console.log("Form submitted:", formData);
+    // setting dummy for now
+    const updatedFormData= {...formData, 
+      assignedToEmail: decoded?.email,
+      assignedTo: decoded?.fullName,
+      createdByEmail: decoded?.email,
+      createdBy: decoded?.fullName,
+
+    }
+    setFormData(updatedFormData)
+    dispatch(createTask(updatedFormData))
+    console.log("Form submitted:", updatedFormData);
     setIsOpen(false);
   };
 
