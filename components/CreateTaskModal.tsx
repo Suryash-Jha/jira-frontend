@@ -41,7 +41,8 @@ const CreateTaskModal: React.FC<Props> = ({
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e:any) => {
+    e.preventDefault()
     const decoded:any= SecureStorage.getItem('decoded')
 
     // setting dummy for now
@@ -60,14 +61,16 @@ const CreateTaskModal: React.FC<Props> = ({
 
   return (
     <div>
-      <Button onClick={() => setIsOpen(true)}>Open Form</Button>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>
+        <form onSubmit={handleSubmit}>
+
           <DialogHeader>
             <DialogTitle>Create Task</DialogTitle>
           </DialogHeader>
           <Card>
             <CardContent>
+
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="title">Title</Label>
@@ -76,6 +79,7 @@ const CreateTaskModal: React.FC<Props> = ({
                     name="title"
                     value={formData.title}
                     onChange={handleInputChange}
+                    required
                   />
                 </div>
                 <div>
@@ -114,6 +118,7 @@ const CreateTaskModal: React.FC<Props> = ({
                   <Input
                     id="assignedTo"
                     name="assignedTo"
+                    required
                     value={formData.assignedTo}
                     onChange={handleInputChange}
                   />
@@ -123,13 +128,18 @@ const CreateTaskModal: React.FC<Props> = ({
             </CardContent>
           </Card>
           <DialogFooter>
-            <Button onClick={handleSubmit}>Create</Button>
+            <Button type="submit">Create</Button>
             <Button variant="secondary" onClick={() => setIsOpen(false)}>
               Cancel
             </Button>
+
           </DialogFooter>
+
+        </form>
         </DialogContent>
+
       </Dialog>
+      
     </div>
   );
 };

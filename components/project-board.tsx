@@ -23,6 +23,7 @@ import {
 } from '@dnd-kit/sortable'
 import { Column } from "./project-board/column"
 import { SortableItem } from "./project-board/sortable-item"
+// import { Task } from "@/interfaces/tasks"
 
 interface Task {
   id: string
@@ -109,10 +110,12 @@ export function ProjectBoard() {
             }
           }
           if (col.id === overColumn.id) {
+            console.log(activeTask, '----->>>', col.id)
             return {
               ...col,
               tasks: [...col.tasks, activeTask]
             }
+
           }
           return col
         })
