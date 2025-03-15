@@ -1,14 +1,18 @@
 "use client"
 
 import { useState } from "react";
+import { useDispatch } from 'react-redux';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
+import { AppDispatch } from "@/redux/store";
+import { login } from "@/features/auth/authActions";
 
 export default function AuthPage() {
+    const dispatch= useDispatch<AppDispatch>();
   const [formData, setFormData] = useState({ username: "", email: "", password: "" });
 
   const handleChange = (e:any) => {
@@ -17,6 +21,11 @@ export default function AuthPage() {
   
 
     const handleLogin= (event: any): void => {
+        const body={
+            email: formData.email,
+            password: formData.password
+        }
+        dispatch(login(body));
         console.log("Login", formData);
         // throw new Error("Function not implemented.");
     }

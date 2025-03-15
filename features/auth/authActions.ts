@@ -28,7 +28,7 @@ export const login = createAsyncThunk(
 );
 
 export const register = createAsyncThunk(
-  'auth/login',
+  'auth/register',
   async (
     { username, email, password }: { username: string; email: string; password: string },
     { rejectWithValue },
@@ -43,7 +43,7 @@ export const register = createAsyncThunk(
   },
 );
 export const logout = (): AppThunk => async (dispatch) => {
-  dispatch(logoutAction()); // Dispatch the logout slice action
-  return Promise.resolve(); // Return a resolved promise to match the expected return type
+  dispatch(logoutAction()); 
+  return Promise.resolve(); 
 };
 

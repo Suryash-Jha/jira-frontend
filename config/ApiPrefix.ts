@@ -4,7 +4,7 @@ type ApiData = {
 
 // EMPTY FOR NOW
 const ApiPrefixes: Readonly<ApiData> = {
-  api: '', // Default prefix for APIs
+  api: 'api', // Default prefix for APIs
 };
 
 export default ApiPrefixes;

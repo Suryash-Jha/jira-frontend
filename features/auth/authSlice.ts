@@ -1,12 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialState } from './authTypes';
 import {
-  loginMe,
-  forgotPassword,
-  passwordResetConfirm,
-  changePassword,
-  getShortProfile,
-  checkUser,
+  login,
+  register
 } from './authActions';
 import { clearLoginData } from '../../utils/storage';
 import SecureStorage from '../../utils/SecureStorage';
@@ -22,20 +18,17 @@ const authSlice = createSlice({
       SecureStorage.removeItem('token');
       SecureStorage.removeItem('refreshToken');
     },
-    clearMessages(state) {
-      state.error = null;
-      state.successMessage = null;
-    },
+    
   },
   extraReducers: (builder) => {
     builder
       // Login Cases
-      .addCase(loginMe.pending, (state) => {
+      .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        loginMe.fulfilled,
+        login.fulfilled,
         (
           state,
           action: PayloadAction<{ access_token: string; refreshToken: string }>,
@@ -46,17 +39,17 @@ const authSlice = createSlice({
           state.isLoggedIn = true;
         },
       )
-      .addCase(loginMe.rejected, (state, action) => {
+      .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
 
-      .addCase(checkUser.pending, (state) => {
+      .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(
-        checkUser.fulfilled,
+        register.fulfilled,
         (state, action: PayloadAction<{ user: any } | null>) => {
           state.loading = false;
           if (action.payload?.user) {
@@ -68,80 +61,13 @@ const authSlice = createSlice({
           }
         },
       )
-      .addCase(checkUser.rejected, (state, action) => {
+      .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
-      // Forgot Password Cases
-      .addCase(forgotPassword.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.successMessage = null;
-      })
-      .addCase(
-        forgotPassword.fulfilled,
-        (state, action: PayloadAction<string>) => {
-          state.loading = false;
-          state.successMessage = action.payload;
-        },
-      )
-      .addCase(forgotPassword.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-
-      // Password Reset Confirmation Cases
-      .addCase(passwordResetConfirm.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        passwordResetConfirm.fulfilled,
-        (state, action: PayloadAction<string>) => {
-          state.loading = false;
-          state.successMessage = action.payload;
-        },
-      )
-      .addCase(passwordResetConfirm.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-
-      // Change Password Cases
-      .addCase(changePassword.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        changePassword.fulfilled,
-        (state, action: PayloadAction<string>) => {
-          state.loading = false;
-          state.successMessage = action.payload;
-        },
-      )
-      .addCase(changePassword.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-
-      // Get Short Profile Cases
-      .addCase(getShortProfile.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(
-        getShortProfile.fulfilled,
-        (state, action: PayloadAction<Record<string, any>>) => {
-          state.loading = false;
-          state.profile = action.payload;
-        },
-      )
-      .addCase(getShortProfile.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
+     
   },
 });
 
-export const { logout, clearMessages } = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;
