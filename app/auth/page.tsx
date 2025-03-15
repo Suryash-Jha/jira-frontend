@@ -1,14 +1,20 @@
 "use client"
 
 import { useState } from "react";
+import { useDispatch } from 'react-redux';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
+import { AppDispatch } from "@/redux/store";
+import { login, register} from "@/features/auth/authActions";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 export default function AuthPage() {
+    const dispatch= useDispatch<AppDispatch>();
   const [formData, setFormData] = useState({ username: "", email: "", password: "" });
 
   const handleChange = (e:any) => {
@@ -16,11 +22,23 @@ export default function AuthPage() {
   };
   
 
-    const handleLogin= (event: any): void => {
+    const handleLogin= async (event: any): Promise<any> => {
+        const body={
+            email: formData.email,
+            password: formData.password
+        }
+        await dispatch(login(body));
         console.log("Login", formData);
         // throw new Error("Function not implemented.");
     }
     const handleRegister= (event: any): void => {
+        const body={
+            username: formData.username,
+            email: formData.email,
+            password: formData.password
+            
+        }
+        dispatch(register(body));
         console.log("Register", formData);
         // throw new Error("Function not implemented.");
     }
@@ -62,6 +80,7 @@ export default function AuthPage() {
             </TabsContent>
           </Tabs>
         </Card>
+        <ToastContainer />
       </motion.div>
     </div>
   );

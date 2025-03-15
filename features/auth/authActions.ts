@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-// import { getUserToken, setLoginData } from '../../utils/storage';
+import {createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { setLoginData } from '../../utils/storage';
 import { AppThunk } from '../../redux/store';
 import { logout as logoutAction } from './authSlice';
 import { jwtDecode } from 'jwt-decode';
@@ -8,6 +8,7 @@ import {
   registerApi,
 } from '../../api/authApi';
 import SecureStorage from '../../utils/SecureStorage';
+import { toast } from 'react-toastify';
 
 
 
@@ -19,16 +20,21 @@ export const login = createAsyncThunk(
   ) => {
     try {
       const response = await loginApi({ email, password });
-      // setLoginData(response.access_token, response.refreshToken);
+      console.log(response, '====')
+      setLoginData(response.access_token);
+      toast.success('Login Successful!')
+
       return response;
     } catch (error: any) {
+      toast.error('Login Failed!')
+
       return rejectWithValue(error.response?.data?.message || 'Login failed');
     }
   },
 );
 
 export const register = createAsyncThunk(
-  'auth/login',
+  'auth/register',
   async (
     { username, email, password }: { username: string; email: string; password: string },
     { rejectWithValue },
@@ -36,14 +42,18 @@ export const register = createAsyncThunk(
     try {
       const response = await registerApi({ username, email, password });
       // setLoginData(response.access_token, response.refreshToken);
+      toast.success('Registration Successful!')
+
       return response;
     } catch (error: any) {
+      toast.error('Registration Failed!')
+
       return rejectWithValue(error.response?.data?.message || 'Login failed');
     }
   },
 );
 export const logout = (): AppThunk => async (dispatch) => {
-  dispatch(logoutAction()); // Dispatch the logout slice action
-  return Promise.resolve(); // Return a resolved promise to match the expected return type
+  dispatch(logoutAction()); 
+  return Promise.resolve(); 
 };
 

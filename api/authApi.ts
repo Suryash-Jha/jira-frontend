@@ -5,6 +5,7 @@ export const loginApi = async (data: {
   email: string;
   password: string;
 }) => {
+  console.log(`${Prefix.api}/auth/login/`, '--->>>url')
   const response = await AXIOS.post(`${Prefix.api}/auth/login/`, data);
   return response.data;
 };
