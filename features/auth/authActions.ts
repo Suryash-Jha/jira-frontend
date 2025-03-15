@@ -1,5 +1,5 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-// import { getUserToken, setLoginData } from '../../utils/storage';
+import {createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { setLoginData } from '../../utils/storage';
 import { AppThunk } from '../../redux/store';
 import { logout as logoutAction } from './authSlice';
 import { jwtDecode } from 'jwt-decode';
@@ -19,7 +19,8 @@ export const login = createAsyncThunk(
   ) => {
     try {
       const response = await loginApi({ email, password });
-      // setLoginData(response.access_token, response.refreshToken);
+      console.log(response, '====')
+      setLoginData(response.access_token);
       return response;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Login failed');

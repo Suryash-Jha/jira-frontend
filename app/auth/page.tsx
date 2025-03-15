@@ -34,6 +34,7 @@ export default function AuthPage() {
             username: formData.username,
             email: formData.email,
             password: formData.password
+            
         }
         dispatch(register(body));
         console.log("Register", formData);
