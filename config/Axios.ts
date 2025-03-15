@@ -5,14 +5,15 @@ import axios, {
 } from 'axios';
 import SecureStorage from '../utils/SecureStorage';
 
-console.log(process.env.API_BASE_URL)
+console.log(process.env.NEXT_PUBLIC_API_BASE_URL)
 const AXIOS: AxiosInstance = axios.create({
-  baseURL: process.env.API_BASE_URL || '', 
+  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || '', 
   headers: {
     'Content-Type': 'application/json',
   },
   // timeout: 10000, 
 });
+console.log('AXIOS', AXIOS);
 
 AXIOS.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
