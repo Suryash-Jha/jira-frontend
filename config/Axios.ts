@@ -13,7 +13,6 @@ const AXIOS: AxiosInstance = axios.create({
   },
   // timeout: 10000, 
 });
-console.log('AXIOS', AXIOS);
 
 AXIOS.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
