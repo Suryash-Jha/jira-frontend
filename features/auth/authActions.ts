@@ -36,11 +36,11 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
   'auth/register',
   async (
-    { username, email, password }: { username: string; email: string; password: string },
+    { fullName, email, password }: { fullName: string; email: string; password: string },
     { rejectWithValue },
   ) => {
     try {
-      const response = await registerApi({ username, email, password });
+      const response = await registerApi({ fullName, email, password });
       // setLoginData(response.access_token, response.refreshToken);
       toast.success('Registration Successful!')
 

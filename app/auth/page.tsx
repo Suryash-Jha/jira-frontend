@@ -9,45 +9,45 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { AppDispatch } from "@/redux/store";
-import { login, register} from "@/features/auth/authActions";
+import { login, register } from "@/features/auth/authActions";
 import { ToastContainer, toast } from 'react-toastify';
 
 
 export default function AuthPage() {
-    const dispatch= useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] = useState({ username: "", email: "", password: "" });
 
-  const handleChange = (e:any) => {
+  const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  
 
-    const handleLogin= async (event: any): Promise<any> => {
-        const body={
-            email: formData.email,
-            password: formData.password
-        }
-        await dispatch(login(body));
-        console.log("Login", formData);
-        // throw new Error("Function not implemented.");
+
+  const handleLogin = async (event: any): Promise<any> => {
+    const body = {
+      email: formData.email,
+      password: formData.password
     }
-    const handleRegister= (event: any): void => {
-        const body={
-            username: formData.username,
-            email: formData.email,
-            password: formData.password
-            
-        }
-        dispatch(register(body));
-        console.log("Register", formData);
-        // throw new Error("Function not implemented.");
+    await dispatch(login(body));
+    console.log("Login", formData);
+    // throw new Error("Function not implemented.");
+  }
+  const handleRegister = (event: any): void => {
+    const body = {
+      fullName: formData.username,
+      email: formData.email,
+      password: formData.password
+
     }
+    dispatch(register(body));
+    console.log("Register", formData);
+    // throw new Error("Function not implemented.");
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
-      <motion.div 
-        initial={{ opacity: 0, y: -50 }} 
-        animate={{ opacity: 1, y: 0 }} 
+      <motion.div
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         <Card className="w-96 bg-gray-800 shadow-xl p-6 rounded-2xl">
@@ -56,7 +56,7 @@ export default function AuthPage() {
               <TabsTrigger value="login" className="flex-1 text-center py-2">Login</TabsTrigger>
               <TabsTrigger value="register" className="flex-1 text-center py-2">Register</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="login">
               <CardContent>
                 <Label className="block mb-2">Email</Label>
@@ -66,7 +66,7 @@ export default function AuthPage() {
                 <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={handleLogin}>Login</Button>
               </CardContent>
             </TabsContent>
-            
+
             <TabsContent value="register">
               <CardContent>
                 <Label className="block mb-2">Username</Label>
