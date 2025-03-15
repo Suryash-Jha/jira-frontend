@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
+import { createTask } from "@/features/task/taskActions";
 interface Props {
   isOpen: any;
   setIsOpen: any;
@@ -32,7 +33,7 @@ const CreateTaskModal: React.FC<Props> = ({
     // setFormData(...formData, {
 
     // })
-    // dispatch(createTask(formData))
+    dispatch(createTask(formData))
     console.log("Form submitted:", formData);
     setIsOpen(false);
   };
