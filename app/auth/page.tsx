@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { AppDispatch } from "@/redux/store";
-import { login } from "@/features/auth/authActions";
+import { login, register} from "@/features/auth/authActions";
 
 export default function AuthPage() {
     const dispatch= useDispatch<AppDispatch>();
@@ -30,6 +30,12 @@ export default function AuthPage() {
         // throw new Error("Function not implemented.");
     }
     const handleRegister= (event: any): void => {
+        const body={
+            username: formData.username,
+            email: formData.email,
+            password: formData.password
+        }
+        dispatch(register(body));
         console.log("Register", formData);
         // throw new Error("Function not implemented.");
     }
