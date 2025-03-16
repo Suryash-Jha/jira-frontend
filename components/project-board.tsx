@@ -66,7 +66,7 @@ interface Column {
 //     ],
 //   },
 // ]
-interface Props{
+interface Props {
   taskList: any;
 }
 
@@ -77,40 +77,40 @@ export const ProjectBoard: React.FC<Props> = ({
   const [activeId, setActiveId] = useState<string | null>(null)
 
   // COPIED FROM CHATGPT!! WILL WRITE IT AGAIN
-  const transformTasks= (apiTasks: any) => {
+  const transformTasks = (apiTasks: any) => {
     const columnsMap: any = {};
-  
+
     apiTasks.forEach((task: any) => {
       const columnId = task.status; // 'todo', 'in-progress', 'done', etc.
-  
+
       if (!columnsMap[columnId]) {
         columnsMap[columnId] = {
           id: columnId,
-          title: columnId.replace(/-/g, ' ').replace(/\b\w/g, (c:any) => c.toUpperCase()),
+          title: columnId.replace(/-/g, ' ').replace(/\b\w/g, (c: any) => c.toUpperCase()),
           tasks: []
         };
       }
-  
+
       columnsMap[columnId].tasks.push({
         id: task.id,
-        content: task.title,
+        title: task.title,
         priority: task.priority === 1 ? 'low' : task.priority === 2 ? 'medium' : 'high',
-        assignee: task.assignedTo,
+        assignedTo: task.assignedTo,
         type: 'task', // Assuming all are tasks; modify if needed
       });
     });
-  
+
     return Object.values(columnsMap);
   }
-  
-  useEffect(()=>{
-    if(taskList && taskList.data && taskList.data.length > 0 ){
-      const transformedData : any= transformTasks(taskList.data)
+
+  useEffect(() => {
+    if (taskList && taskList.data && taskList.data.length > 0) {
+      const transformedData: any = transformTasks(taskList.data)
       setColumns(transformedData)
     }
 
   }, [taskList])
-console.log(columns, '----->>>')
+  console.log(columns, '----->>>')
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -123,12 +123,13 @@ console.log(columns, '----->>>')
   )
 
   const handleDragStart = (event: DragStartEvent) => {
+    console.log(event, '--jkj')
     setActiveId(event.active.id as string)
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
-
+    console.log(active, over, '--oo')
     if (!over) return
 
     const activeTask = findTask(active.id as string)
@@ -142,27 +143,25 @@ console.log(columns, '----->>>')
     if (!activeColumn || !overColumn) return
 
     if (activeColumn.id !== overColumn.id) {
-      setColumns(columns => {
-        const newColumns = columns.map(col => {
+      setColumns(columns =>
+        columns.map(col => {
           if (col.id === activeColumn.id) {
             return {
               ...col,
-              tasks: col.tasks.filter(task => task._id !== activeTask._id)
+              tasks: col.tasks.filter((task:any) => task._id !== activeTask._id), // Fix _id to id
             }
           }
           if (col.id === overColumn.id) {
-            console.log(activeTask, '----->>>', col.id)
             return {
               ...col,
-              tasks: [...col.tasks, activeTask]
+              tasks: [...col.tasks, activeTask],
             }
-
           }
           return col
         })
-        return newColumns
-      })
-    } else {
+      )
+    }
+    else {
       setColumns(columns => {
         const newColumns = columns.map(col => {
           if (col.id === activeColumn.id) {
@@ -191,7 +190,7 @@ console.log(columns, '----->>>')
   }
 
   const findColumn = (task: Task) => {
-    return columns.find(column => column.tasks.some(t => t._id === task._id))
+    return columns.find(column => column.tasks.some((t:any) => t.id === task._id))
   }
 
   const getPriorityColor = (priority: string) => {
@@ -222,17 +221,17 @@ console.log(columns, '----->>>')
     <Card className="p-4 space-y-3 cursor-move hover:shadow-md transition-shadow">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <span>{getTypeIcon(task.type)}</span>
-          <Badge variant="outline">{task._id}</Badge>
+          <span>{getTypeIcon(task?.type)}</span>
+          {/* <Badge variant="outline">{task._id}</Badge> */}
         </div>
         <div className={`w-2 h-2 rounded-full ${getPriorityColor(String(task.priority))}`} />
       </div>
-      <p className="text-sm">{task.title}</p>
+      <p className="text-sm">{task?.title}</p>
       <div className="flex items-center justify-between">
         <Avatar className="h-6 w-6">
-          <AvatarFallback>{task.assignedTo.split(' ')[0][0]}</AvatarFallback>
+          <AvatarFallback>{task?.assignedTo?.split(' ')[0][0]}</AvatarFallback>
         </Avatar>
-        <Badge variant="secondary">{task.priority}</Badge>
+        <Badge variant="secondary">{task?.priority}</Badge>
       </div>
     </Card>
   )
@@ -247,9 +246,9 @@ console.log(columns, '----->>>')
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {columns.map(column => (
           <Column key={column.id} title={column.title}>
-            <SortableContext items={column.tasks.map(task => task._id)} strategy={verticalListSortingStrategy}>
-              <div className="space-y-3">
-                {taskList && taskList.data && taskList.data.map((task:any) => (
+            <SortableContext items={column.tasks.map((task:any) => task.id)} strategy={verticalListSortingStrategy}>
+              <div className="space-y-3" style={{maxHeight: '60dvh', overflow: 'auto'}}>
+                {column && column.tasks && column.tasks.map((task: any) => (
                   <SortableItem key={task._id} id={task._id}>
                     {renderTask(task)}
                   </SortableItem>

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import { createTask } from "@/features/task/taskActions";
+import { createTask, getAllTask } from "@/features/task/taskActions";
 import { Task } from "@/interfaces/tasks";
 import SecureStorage from "@/utils/SecureStorage";
 interface Props {
@@ -26,7 +26,7 @@ const CreateTaskModal: React.FC<Props> = ({
     title: "",
     priority: 1,
     description: "",
-    status: "pending",
+    status: "todo",
     dueDate: "",
     createdBy: "",
     createdByEmail: "",
@@ -58,6 +58,8 @@ const CreateTaskModal: React.FC<Props> = ({
     }
     setFormData(updatedFormData)
     dispatch(createTask(updatedFormData))
+    dispatch(getAllTask(''))
+
     console.log("Form submitted:", updatedFormData);
     setIsOpen(false);
   };
