@@ -24,15 +24,7 @@ import {
 import { Column } from "./project-board/column"
 import { SortableItem } from "./project-board/sortable-item"
 import { Task } from "@/interfaces/tasks"
-// import { Task } from "@/interfaces/tasks"
 
-// interface Task {
-//   id: string
-//   content: string
-//   priority: 'high' | 'medium' | 'low'
-//   assignee: string
-//   type: 'task' | 'bug' | 'story'
-// }
 
 interface Column {
   id: string
@@ -40,32 +32,6 @@ interface Column {
   tasks: Task[]
 }
 
-// const initialColumns: Column[] = [
-//   {
-//     id: 'todo',
-//     title: 'To Do',
-//     tasks: [
-//       { id: '1', content: 'Implement authentication', priority: 'high', assignee: 'John D.', type: 'story' },
-//       { id: '2', content: 'Fix navigation bug', priority: 'medium', assignee: 'Sarah M.', type: 'bug' },
-//       { id: '3', content: 'Add user settings', priority: 'low', assignee: 'Mike R.', type: 'task' },
-//     ],
-//   },
-//   {
-//     id: 'in-progress',
-//     title: 'In Progress',
-//     tasks: [
-//       { id: '4', content: 'Update documentation', priority: 'medium', assignee: 'Emma W.', type: 'task' },
-//       { id: '5', content: 'Implement dark mode', priority: 'low', assignee: 'John D.', type: 'story' },
-//     ],
-//   },
-//   {
-//     id: 'done',
-//     title: 'Done',
-//     tasks: [
-//       { id: '6', content: 'Setup project structure', priority: 'high', assignee: 'Sarah M.', type: 'task' },
-//     ],
-//   },
-// ]
 interface Props{
   taskList:any;
 }
@@ -78,7 +44,7 @@ export const ProjectBoard: React.FC<Props>= ({
     const transformTasks = (apiTasks: any) => {
       const columnsMap: any = {};
   
-      apiTasks.forEach((task: any) => {
+      apiTasks.forEach((task: any, i:any) => {
         const columnId = task.status; // 'todo', 'in-progress', 'done', etc.
   
         if (!columnsMap[columnId]) {
@@ -91,6 +57,7 @@ export const ProjectBoard: React.FC<Props>= ({
   
         columnsMap[columnId].tasks.push({
           id: task.id,
+          idx: i,
           title: task.title,
           priority: task.priority === 1 ? 'low' : task.priority === 2 ? 'medium' : 'high',
           assignedTo: task.assignedTo,
@@ -119,12 +86,13 @@ export const ProjectBoard: React.FC<Props>= ({
   )
 
   const handleDragStart = (event: DragStartEvent) => {
+    console.log(event, '--jkj')
     setActiveId(event.active.id as string)
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
-
+    console.log(active, over, '--oo')
     if (!over) return
 
     const activeTask = findTask(active.id as string)
@@ -138,8 +106,8 @@ export const ProjectBoard: React.FC<Props>= ({
     if (!activeColumn || !overColumn) return
 
     if (activeColumn.id !== overColumn.id) {
-      setColumns(columns => {
-        const newColumns = columns.map(col => {
+      setColumns(columns =>
+        columns.map(col => {
           if (col.id === activeColumn.id) {
             return {
               ...col,
@@ -147,18 +115,16 @@ export const ProjectBoard: React.FC<Props>= ({
             }
           }
           if (col.id === overColumn.id) {
-            console.log(activeTask, '----->>>', col.id)
             return {
               ...col,
-              tasks: [...col.tasks, activeTask]
+              tasks: [...col.tasks, activeTask],
             }
-
           }
           return col
         })
-        return newColumns
-      })
-    } else {
+      )
+    }
+    else {
       setColumns(columns => {
         const newColumns = columns.map(col => {
           if (col.id === activeColumn.id) {
@@ -219,16 +185,16 @@ export const ProjectBoard: React.FC<Props>= ({
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <span>{getTypeIcon(task.type)}</span>
-          {/* <Badge variant="outline">{task.id}</Badge> */}
+          <Badge variant="outline">{task.idx+1}</Badge>
         </div>
         <div className={`w-2 h-2 rounded-full ${getPriorityColor(String(task.priority))}`} />
       </div>
-      <p className="text-sm">{task.title}</p>
+      <p className="text-sm">{task?.title}</p>
       <div className="flex items-center justify-between">
         <Avatar className="h-6 w-6">
-          <AvatarFallback>{task.assignedTo.split(' ')[0][0]}</AvatarFallback>
+          <AvatarFallback>{task?.assignedTo?.split(' ')[0][0]}</AvatarFallback>
         </Avatar>
-        <Badge variant="secondary">{task.priority}</Badge>
+        <Badge variant="secondary">{task?.priority}</Badge>
       </div>
     </Card>
   )
