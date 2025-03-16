@@ -50,8 +50,9 @@ const CreateTaskModal: React.FC<Props> = ({
     const decoded: any = SecureStorage.getItem('decoded')
 
     // setting dummy for now
+    const {_id, id, idx, ...prevFormData}= formData
     const updatedFormData = {
-      ...formData,
+      ...prevFormData,
       assignedToEmail: decoded?.email,
       assignedTo: decoded?.fullName,
       createdByEmail: decoded?.email,
