@@ -59,7 +59,7 @@ const CreateTaskModal: React.FC<Props> = ({
       createdBy: decoded?.fullName,
 
     }
-    setFormData(updatedFormData)
+    // setFormData(updatedFormData)
     dispatch(createTask(updatedFormData))
     dispatch(getAllTask(''))
 
