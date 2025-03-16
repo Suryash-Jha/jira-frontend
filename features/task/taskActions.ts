@@ -2,14 +2,15 @@ import {createAsyncThunk } from '@reduxjs/toolkit';
 
 import {
   createTaskApi,
-  getAllTaskApi
+  getAllTaskApi,
+  updateTaskStatusApi
 } from '../../api/taskApi';
 import { toast } from 'react-toastify';
 
 
 
 export const createTask = createAsyncThunk(
-  'auth/createTask',
+  'task/createTask',
   async (
     body: any,
     { rejectWithValue },
@@ -27,9 +28,27 @@ export const createTask = createAsyncThunk(
     }
   },
 );
+export const updateTaskStatus = createAsyncThunk(
+  'task/updateTaskStatus',
+  async (
+    {id, body}: any,
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await updateTaskStatusApi(id, body);
+      toast.success('Task Status Updation Successful!')
+
+      return response;
+    } catch (error: any) {
+      toast.error('Task Status Updation Failed!')
+
+      return rejectWithValue(error.response?.data?.message || 'Task Status Updation failed');
+    }
+  },
+);
 
 export const getAllTask = createAsyncThunk(
-  'auth/getAllTask',
+  'task/getAllTask',
   async (
     url: any,
     { rejectWithValue },

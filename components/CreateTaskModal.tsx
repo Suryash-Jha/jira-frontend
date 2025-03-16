@@ -23,6 +23,8 @@ const CreateTaskModal: React.FC<Props> = ({
   const dispatch = useDispatch<AppDispatch>();
   const [formData, setFormData] = useState<Task>({
     _id: "",
+    id: "",
+    idx: "",
     title: "",
     priority: 1,
     description: "",
