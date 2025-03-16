@@ -4,7 +4,6 @@ import {
   login,
   register
 } from './authActions';
-import { clearLoginData } from '../../utils/storage';
 import SecureStorage from '../../utils/SecureStorage';
 
 const authSlice = createSlice({
@@ -12,11 +11,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     logout(state) {
-      state.accessToken = null;
-      state.refreshToken = null;
-      state.isLoggedIn = false;
+      state.accessToken=null
       SecureStorage.removeItem('token');
-      SecureStorage.removeItem('refreshToken');
+      SecureStorage.removeItem('decoded');
+      window.location.href = '/auth'; 
     },
     
   },

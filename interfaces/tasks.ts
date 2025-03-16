@@ -1,4 +1,5 @@
 export interface Task{
+    _id: string,
     title: string,
     priority: number,
     description: string,
@@ -8,4 +9,5 @@ export interface Task{
     createdByEmail: string,
     assignedTo: string,
     assignedToEmail: string,
+    type: string,
 }

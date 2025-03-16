@@ -26,7 +26,7 @@ export const login = createAsyncThunk(
       toast.success('Login Successful!')
       setTimeout(()=>{
         window.location.href='/'
-      }, 3000)
+      }, 1500)
       return response;
     } catch (error: any) {
       toast.error('Login Failed!')
