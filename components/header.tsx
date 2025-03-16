@@ -11,8 +11,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Bell, HelpCircle } from "lucide-react"
+import { logout } from "@/features/auth/authSlice"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "@/redux/store"
 
 export function Header() {
+  const dispatch= useDispatch<AppDispatch>()
   return (
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
@@ -49,7 +53,7 @@ export function Header() {
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={()=> dispatch(logout())}>
                 Log out
               </DropdownMenuItem>
             </DropdownMenuContent>

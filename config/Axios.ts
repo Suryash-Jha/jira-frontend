@@ -37,7 +37,7 @@ AXIOS.interceptors.response.use(
     if (error.response?.status === 401) {
       console.error('Unauthorized - Redirecting to login...');
       localStorage.removeItem('accessToken');
-      // window.location.href = '/login'; // Adjust based on your app's routing
+      window.location.href = '/auth'; // Adjust based on your app's routing
     }
     return Promise.reject(error);
   },

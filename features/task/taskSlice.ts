@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { initialState } from './taskTypes';
 import {
-    createTask
+    createTask,
+    getAllTask
 } from './taskActions';
-import SecureStorage from '../../utils/SecureStorage';
 
 const taskSlice = createSlice({
   name: 'task',
@@ -32,6 +32,24 @@ const taskSlice = createSlice({
         },
       )
       .addCase(createTask.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getAllTask.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        getAllTask.fulfilled,
+        (
+          state,
+          action: PayloadAction<any>,
+        ) => {
+          state.loading = false;
+          state.taskList= action.payload
+        },
+      )
+      .addCase(getAllTask.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })

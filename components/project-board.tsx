@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -23,15 +23,16 @@ import {
 } from '@dnd-kit/sortable'
 import { Column } from "./project-board/column"
 import { SortableItem } from "./project-board/sortable-item"
+import { Task } from "@/interfaces/tasks"
 // import { Task } from "@/interfaces/tasks"
 
-interface Task {
-  id: string
-  content: string
-  priority: 'high' | 'medium' | 'low'
-  assignee: string
-  type: 'task' | 'bug' | 'story'
-}
+// interface Task {
+//   id: string
+//   content: string
+//   priority: 'high' | 'medium' | 'low'
+//   assignee: string
+//   type: 'task' | 'bug' | 'story'
+// }
 
 interface Column {
   id: string
@@ -39,37 +40,73 @@ interface Column {
   tasks: Task[]
 }
 
-const initialColumns: Column[] = [
-  {
-    id: 'todo',
-    title: 'To Do',
-    tasks: [
-      { id: '1', content: 'Implement authentication', priority: 'high', assignee: 'John D.', type: 'story' },
-      { id: '2', content: 'Fix navigation bug', priority: 'medium', assignee: 'Sarah M.', type: 'bug' },
-      { id: '3', content: 'Add user settings', priority: 'low', assignee: 'Mike R.', type: 'task' },
-    ],
-  },
-  {
-    id: 'in-progress',
-    title: 'In Progress',
-    tasks: [
-      { id: '4', content: 'Update documentation', priority: 'medium', assignee: 'Emma W.', type: 'task' },
-      { id: '5', content: 'Implement dark mode', priority: 'low', assignee: 'John D.', type: 'story' },
-    ],
-  },
-  {
-    id: 'done',
-    title: 'Done',
-    tasks: [
-      { id: '6', content: 'Setup project structure', priority: 'high', assignee: 'Sarah M.', type: 'task' },
-    ],
-  },
-]
-
-export function ProjectBoard() {
-  const [columns, setColumns] = useState<Column[]>(initialColumns)
+// const initialColumns: Column[] = [
+//   {
+//     id: 'todo',
+//     title: 'To Do',
+//     tasks: [
+//       { id: '1', content: 'Implement authentication', priority: 'high', assignee: 'John D.', type: 'story' },
+//       { id: '2', content: 'Fix navigation bug', priority: 'medium', assignee: 'Sarah M.', type: 'bug' },
+//       { id: '3', content: 'Add user settings', priority: 'low', assignee: 'Mike R.', type: 'task' },
+//     ],
+//   },
+//   {
+//     id: 'in-progress',
+//     title: 'In Progress',
+//     tasks: [
+//       { id: '4', content: 'Update documentation', priority: 'medium', assignee: 'Emma W.', type: 'task' },
+//       { id: '5', content: 'Implement dark mode', priority: 'low', assignee: 'John D.', type: 'story' },
+//     ],
+//   },
+//   {
+//     id: 'done',
+//     title: 'Done',
+//     tasks: [
+//       { id: '6', content: 'Setup project structure', priority: 'high', assignee: 'Sarah M.', type: 'task' },
+//     ],
+//   },
+// ]
+interface Props{
+  taskList:any;
+}
+export const ProjectBoard: React.FC<Props>= ({
+  taskList
+}) => {
+  const [columns, setColumns] = useState<Column[]>([])
   const [activeId, setActiveId] = useState<string | null>(null)
+    // COPIED FROM CHATGPT!! WILL WRITE IT AGAIN
+    const transformTasks = (apiTasks: any) => {
+      const columnsMap: any = {};
+  
+      apiTasks.forEach((task: any) => {
+        const columnId = task.status; // 'todo', 'in-progress', 'done', etc.
+  
+        if (!columnsMap[columnId]) {
+          columnsMap[columnId] = {
+            id: columnId,
+            title: columnId.replace(/-/g, ' ').replace(/\b\w/g, (c: any) => c.toUpperCase()),
+            tasks: []
+          };
+        }
+  
+        columnsMap[columnId].tasks.push({
+          id: task.id,
+          title: task.title,
+          priority: task.priority === 1 ? 'low' : task.priority === 2 ? 'medium' : 'high',
+          assignedTo: task.assignedTo,
+          type: 'task', // Assuming all are tasks; modify if needed
+        });
+      });
+  
+      return Object.values(columnsMap);
+    }
+  useEffect(() => {
+    if (taskList && taskList.data && taskList.data.length > 0) {
+      const transformedData: any = transformTasks(taskList.data)
+      setColumns(transformedData)
+    }
 
+  }, [taskList])
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -182,14 +219,14 @@ export function ProjectBoard() {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <span>{getTypeIcon(task.type)}</span>
-          <Badge variant="outline">{task.id}</Badge>
+          {/* <Badge variant="outline">{task.id}</Badge> */}
         </div>
-        <div className={`w-2 h-2 rounded-full ${getPriorityColor(task.priority)}`} />
+        <div className={`w-2 h-2 rounded-full ${getPriorityColor(String(task.priority))}`} />
       </div>
-      <p className="text-sm">{task.content}</p>
+      <p className="text-sm">{task.title}</p>
       <div className="flex items-center justify-between">
         <Avatar className="h-6 w-6">
-          <AvatarFallback>{task.assignee.split(' ')[0][0]}</AvatarFallback>
+          <AvatarFallback>{task.assignedTo.split(' ')[0][0]}</AvatarFallback>
         </Avatar>
         <Badge variant="secondary">{task.priority}</Badge>
       </div>
@@ -224,3 +261,4 @@ export function ProjectBoard() {
     </DndContext>
   )
 }
+
