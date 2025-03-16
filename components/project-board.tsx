@@ -24,6 +24,9 @@ import {
 import { Column } from "./project-board/column"
 import { SortableItem } from "./project-board/sortable-item"
 import { Task } from "@/interfaces/tasks"
+import { updateTaskStatus } from "@/features/task/taskActions"
+import { useDispatch } from "react-redux"
+import { AppDispatch } from "@/redux/store"
 
 
 interface Column {
@@ -38,6 +41,7 @@ interface Props{
 export const ProjectBoard: React.FC<Props>= ({
   taskList
 }) => {
+  const dispatch= useDispatch<AppDispatch>()
   const [columns, setColumns] = useState<Column[]>([])
   const [activeId, setActiveId] = useState<string | null>(null)
     // COPIED FROM CHATGPT!! WILL WRITE IT AGAIN
@@ -109,6 +113,8 @@ export const ProjectBoard: React.FC<Props>= ({
       setColumns(columns =>
         columns.map(col => {
           if (col.id === activeColumn.id) {
+            console.log(activeTask.id, '----->', activeColumn.id, '---->', overColumn.id)
+            dispatch(updateTaskStatus({id: activeTask.id, body: {status:overColumn.id}}))
             return {
               ...col,
               tasks: col.tasks.filter(task => task.id !== activeTask.id)
