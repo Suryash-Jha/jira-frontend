@@ -215,7 +215,7 @@ export const ProjectBoard: React.FC<Props>= ({
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {columns.map(column => (
-          <Column key={column.id} title={column.title} taskCount={column.tasks.length}>
+          <Column key={column.id} title={column.title} taskCount={String(column.tasks.length)}>
             <SortableContext items={column.tasks.map(task => task.id)} strategy={verticalListSortingStrategy}>
               <div className="space-y-3">
                 {column.tasks.map(task => (
