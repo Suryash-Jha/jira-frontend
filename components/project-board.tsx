@@ -47,17 +47,18 @@ export const ProjectBoard: React.FC<Props>= ({
     // COPIED FROM CHATGPT!! WILL WRITE IT AGAIN
     const transformTasks = (apiTasks: any) => {
       const columnsMap: any = {};
-  
+      // Hardcoded statuses
+      const status= ['todo', 'in-progress', 'done']
+      status.map((item)=>{
+        columnsMap[item] = {
+          id: item,
+          title: item.replace(/-/g, ' ').replace(/\b\w/g, (c: any) => c.toUpperCase()),
+          tasks: []
+        };
+      })
       apiTasks.forEach((task: any, i:any) => {
-        const columnId = task.status; // 'todo', 'in-progress', 'done', etc.
-  
-        if (!columnsMap[columnId]) {
-          columnsMap[columnId] = {
-            id: columnId,
-            title: columnId.replace(/-/g, ' ').replace(/\b\w/g, (c: any) => c.toUpperCase()),
-            tasks: []
-          };
-        }
+        const columnId = task.status; 
+
   
         columnsMap[columnId].tasks.push({
           id: task.id,
