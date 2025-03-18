@@ -34,10 +34,12 @@ interface Column {
 
 interface Props {
   taskList: any;
+  viewOnly: any;
 }
 
 export const ProjectBoard: React.FC<Props> = ({
-  taskList
+  taskList,
+  viewOnly
 }) => {
   const dispatch = useDispatch<AppDispatch>()
   const [columns, setColumns] = useState<Column[]>([])
@@ -215,7 +217,7 @@ export const ProjectBoard: React.FC<Props> = ({
   }
 
   const renderTask = (task: Task) => (
-    <Card className="p-4 space-y-3 cursor-move hover:shadow-md transition-shadow">
+    <Card className={`p-4 space-y-3 cursor-move hover:shadow-md transition-shadow ${viewOnly? 'bg-yellow-50': ''}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <span>{getTypeIcon(task.type)}</span>
@@ -237,8 +239,8 @@ export const ProjectBoard: React.FC<Props> = ({
     <DndContext
       sensors={sensors}
       collisionDetection={closestCorners}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
+      onDragStart={(e)=> viewOnly ? null: handleDragStart(e)}
+      onDragEnd={(e)=> viewOnly ? null: handleDragEnd(e)}
     >
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {columns.map(column => (

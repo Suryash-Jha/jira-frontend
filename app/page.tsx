@@ -29,7 +29,7 @@ export default function Home() {
           </div>
         </div>
 
-        <ProjectBoard taskList={taskList}/>
+        <ProjectBoard taskList={taskList} viewOnly={true}/>
         <CreateTaskModal 
         isOpen={isOpen}
         setIsOpen={setIsOpen}
