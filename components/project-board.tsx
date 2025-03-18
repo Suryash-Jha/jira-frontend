@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useState } from "react"
 import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -28,57 +26,55 @@ import { updateTaskStatus } from "@/features/task/taskActions"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "@/redux/store"
 
-
 interface Column {
   id: string
   title: string
   tasks: Task[]
 }
 
-interface Props{
-  taskList:any;
+interface Props {
+  taskList: any;
 }
-export const ProjectBoard: React.FC<Props>= ({
+
+export const ProjectBoard: React.FC<Props> = ({
   taskList
 }) => {
-  const dispatch= useDispatch<AppDispatch>()
+  const dispatch = useDispatch<AppDispatch>()
   const [columns, setColumns] = useState<Column[]>([])
   const [activeId, setActiveId] = useState<string | null>(null)
-    // COPIED FROM CHATGPT!! WILL WRITE IT AGAIN
-    const transformTasks = (apiTasks: any) => {
-      const columnsMap: any = {};
-      // Hardcoded statuses
-      const status= ['todo', 'in-progress', 'done']
-      status.map((item)=>{
-        columnsMap[item] = {
-          id: item,
-          title: item.replace(/-/g, ' ').replace(/\b\w/g, (c: any) => c.toUpperCase()),
-          tasks: []
-        };
-      })
-      apiTasks.forEach((task: any, i:any) => {
-        const columnId = task.status; 
 
-  
-        columnsMap[columnId].tasks.push({
-          id: task.id,
-          idx: i,
-          title: task.title,
-          priority: task.priority === 1 ? 'low' : task.priority === 2 ? 'medium' : 'high',
-          assignedTo: task.assignedTo,
-          type: 'task', // Assuming all are tasks; modify if needed
-        });
+  const transformTasks = (apiTasks: any) => {
+    const columnsMap: any = {};
+    const status = ['todo', 'in-progress', 'done']
+    status.map((item) => {
+      columnsMap[item] = {
+        id: item,
+        title: item.replace(/-/g, ' ').replace(/\b\w/g, (c: any) => c.toUpperCase()),
+        tasks: []
+      };
+    })
+    apiTasks.forEach((task: any, i: any) => {
+      const columnId = task.status;
+      columnsMap[columnId].tasks.push({
+        id: task.id,
+        idx: i,
+        title: task.title,
+        priority: task.priority === 1 ? 'low' : task.priority === 2 ? 'medium' : 'high',
+        assignedTo: task.assignedTo,
+        type: 'task',
       });
-  
-      return Object.values(columnsMap);
-    }
+    });
+
+    return Object.values(columnsMap);
+  }
+
   useEffect(() => {
     if (taskList && taskList.data && taskList.data.length > 0) {
       const transformedData: any = transformTasks(taskList.data)
       setColumns(transformedData)
     }
-
   }, [taskList])
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -91,37 +87,67 @@ export const ProjectBoard: React.FC<Props>= ({
   )
 
   const handleDragStart = (event: DragStartEvent) => {
-    console.log(event, '--jkj')
     setActiveId(event.active.id as string)
   }
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
-    console.log(active, over, '--oo')
     if (!over) return
 
-    const activeTask = findTask(active.id as string)
-    const overTask = findTask(over.id as string)
+    const activeTask: any = findTask(active.id as string)
+    const overTask: any = findTask(over.id as string)
+    console.log(active, over, '--=-=-=', activeTask, overTask)
+
+    if (!overTask) {
+      dispatch(updateTaskStatus({ id: activeTask.id, body: { status: over.id } }))
+      setColumns(columns =>
+        columns.map(col => {
+     
+          if (col.id === over.id) {
+            
+            return {
+              ...col,
+              tasks: [...col.tasks, activeTask],
+            }
+          }
+          else {
+            return {
+              ...col,
+              tasks: col.tasks.filter(task => task.id !== activeTask.id)
+            }
+          }
+          
+          return col
+        })
+      )
+      return;
+    }
+    console.log(active, over, '--=-=-=', activeTask, overTask)
 
     if (!activeTask || !overTask) return
 
     const activeColumn = findColumn(activeTask)
     const overColumn = findColumn(overTask)
 
+    console.log(active, over, '--=-=-=', activeColumn, overColumn)
     if (!activeColumn || !overColumn) return
 
     if (activeColumn.id !== overColumn.id) {
+      console.log('this called')
+
       setColumns(columns =>
         columns.map(col => {
           if (col.id === activeColumn.id) {
-            console.log(activeTask.id, '----->', activeColumn.id, '---->', overColumn.id)
-            dispatch(updateTaskStatus({id: activeTask.id, body: {status:overColumn.id}}))
+            console.log('this got called')
+            dispatch(updateTaskStatus({ id: activeTask.id, body: { status: overColumn.id } }))
             return {
               ...col,
               tasks: col.tasks.filter(task => task.id !== activeTask.id)
             }
           }
           if (col.id === overColumn.id) {
+            console.log('that got called')
+
             return {
               ...col,
               tasks: [...col.tasks, activeTask],
@@ -130,9 +156,10 @@ export const ProjectBoard: React.FC<Props>= ({
           return col
         })
       )
-    }
-    else {
+    } else {
+      console.log('hiii')
       setColumns(columns => {
+
         const newColumns = columns.map(col => {
           if (col.id === activeColumn.id) {
             const taskIndex = col.tasks.findIndex(task => task.id === activeTask.id)
@@ -192,7 +219,7 @@ export const ProjectBoard: React.FC<Props>= ({
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <span>{getTypeIcon(task.type)}</span>
-          <Badge variant="outline">{task.idx+1}</Badge>
+          <Badge variant="outline">{task.idx + 1}</Badge>
         </div>
         <div className={`w-2 h-2 rounded-full ${getPriorityColor(String(task.priority))}`} />
       </div>
@@ -216,13 +243,22 @@ export const ProjectBoard: React.FC<Props>= ({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {columns.map(column => (
           <Column key={column.id} title={column.title} taskCount={String(column.tasks.length)}>
-            <SortableContext items={column.tasks.map(task => task.id)} strategy={verticalListSortingStrategy}>
+            <SortableContext
+              items={column.tasks.map(task => task.id)}
+              strategy={verticalListSortingStrategy}
+            >
               <div className="space-y-3">
                 {column.tasks.map(task => (
                   <SortableItem key={task.id} id={task.id}>
                     {renderTask(task)}
                   </SortableItem>
                 ))}
+                {/* Add an invisible placeholder for empty columns */}
+                {column.tasks.length === 0 && (
+                  <SortableItem key={column.id} id={column.id} >
+                    <div />
+                  </SortableItem>
+                )}
               </div>
             </SortableContext>
           </Column>
@@ -234,4 +270,3 @@ export const ProjectBoard: React.FC<Props>= ({
     </DndContext>
   )
 }
-
