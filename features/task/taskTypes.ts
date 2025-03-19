@@ -5,6 +5,7 @@
     error: string | null; 
     createTaskResp: any;
     taskList: any;
+    teamList: any;
   }
   
   export const initialState: TaskState = {
@@ -13,5 +14,6 @@
     error: null, 
     createTaskResp: [],
     taskList: [],
+    teamList: [],
 
   };

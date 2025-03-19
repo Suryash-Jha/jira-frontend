@@ -2,6 +2,8 @@ import {createAsyncThunk } from '@reduxjs/toolkit';
 
 import {
   createTaskApi,
+  fetchTeamMemberListApi,
+  findAllTaskOfTeamMemberApi,
   getAllTaskApi,
   updateTaskStatusApi
 } from '../../api/taskApi';
@@ -63,6 +65,42 @@ export const getAllTask = createAsyncThunk(
       toast.error('Task List Retrieval Failed!')
 
       return rejectWithValue(error.response?.data?.message || 'Task List Retrieval failed');
+    }
+  },
+);
+export const fetchTeamMemberList = createAsyncThunk(
+  'task/fetchTeamMemberList',
+  async (
+    body: any,
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await fetchTeamMemberListApi(body);
+      toast.success('Team List Retrieval Successful!')
+
+      return response;
+    } catch (error: any) {
+      toast.error('Team List Retrieval Failed!')
+
+      return rejectWithValue(error.response?.data?.message || 'Team List Retrieval failed');
+    }
+  },
+);
+export const findAllTaskOfTeamMember = createAsyncThunk(
+  'task/findAllTaskOfTeamMember',
+  async (
+    body: any,
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await findAllTaskOfTeamMemberApi(body);
+      toast.success('Team Task List Retrieval Successful!')
+
+      return response;
+    } catch (error: any) {
+      toast.error('Team Task List Retrieval Failed!')
+
+      return rejectWithValue(error.response?.data?.message || 'Team Task List Retrieval failed');
     }
   },
 );

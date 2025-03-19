@@ -23,6 +23,12 @@ const routes = [
     color: "text-sky-500"
   },
   {
+    label: "Team",
+    icon: Users,
+    href: "/team",
+    color: "text-orange-700"
+  },
+  {
     label: "Search",
     icon: Search,
     href: "/search",
@@ -33,12 +39,6 @@ const routes = [
     icon: PlusCircle,
     href: "/projects",
     color: "text-pink-700"
-  },
-  {
-    label: "Team",
-    icon: Users,
-    href: "/team",
-    color: "text-orange-700"
   },
   {
     label: "Calendar",
