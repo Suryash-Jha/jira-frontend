@@ -12,8 +12,8 @@ const taskSlice = createSlice({
   name: 'task',
   initialState,
   reducers: {
-   clearState(state){
-    console.log('clearState')
+   clearState: (state)=> {
+    state.taskList=[]
    },
     
   },
