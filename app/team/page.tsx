@@ -42,7 +42,7 @@ const Team = () => {
                 <div className="flex-1 flex-col space-y-4 p-4 md:p-8 pt-6">
                 <div className=" flex align-center justify-start space-x-4 ">
 
-                    <h1 className=''><b>Select Team Member: </b></h1>
+                    <h1 ><b>Select Team Member: </b></h1>
                     <Select
                     value={teamMember}
                     placeholder={'Select your Teammate, to view there board'}
