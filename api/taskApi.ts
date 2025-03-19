@@ -13,5 +13,13 @@ export const updateTaskStatusApi = async (id: any, body: any) => {
   const response = await AXIOS.patch(`${Prefix.api}/tasks/${id}`, body);
   return response.data;
 };
+export const fetchTeamMemberListApi = async (body: any) => {
+  const response = await AXIOS.post(`${Prefix.api}/tasks/fetchTeamMemberList`, body);
+  return response.data;
+};
+export const findAllTaskOfTeamMemberApi = async (body: any) => {
+  const response = await AXIOS.post(`${Prefix.api}/tasks/findAllTaskOfTeamMember`, body);
+  return response.data;
+};
 
 

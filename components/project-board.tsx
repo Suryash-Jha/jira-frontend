@@ -41,6 +41,7 @@ export const ProjectBoard: React.FC<Props> = ({
   taskList,
   viewOnly
 }) => {
+  console.log('project Board', taskList, viewOnly)
   const dispatch = useDispatch<AppDispatch>()
   const [columns, setColumns] = useState<Column[]>([])
   const [activeId, setActiveId] = useState<string | null>(null)
@@ -55,6 +56,7 @@ export const ProjectBoard: React.FC<Props> = ({
         tasks: []
       };
     })
+
     apiTasks.forEach((task: any, i: any) => {
       const columnId = task.status;
       columnsMap[columnId].tasks.push({
@@ -71,7 +73,7 @@ export const ProjectBoard: React.FC<Props> = ({
   }
 
   useEffect(() => {
-    if (taskList && taskList.data && taskList.data.length > 0) {
+    if (taskList && taskList.data ) {
       const transformedData: any = transformTasks(taskList.data)
       setColumns(transformedData)
     }
