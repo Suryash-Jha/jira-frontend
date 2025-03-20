@@ -1,6 +1,5 @@
 'use client'
 import React, { useEffect, useState } from 'react'
-import { Layout } from '../../components/layout'
 import { ProjectBoard } from '@/components/project-board'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '@/redux/store'
@@ -9,6 +8,7 @@ import { fetchTeamMemberList, findAllTaskOfTeamMember } from '@/features/task/ta
 import SecureStorage from '@/utils/SecureStorage'
 import { ToastContainer } from 'react-toastify'
 import { clearState } from '@/features/task/taskSlice'
+import { Layout } from '@/components/layout'
 
 const Team = () => {
     const dispatch = useDispatch<AppDispatch>()
