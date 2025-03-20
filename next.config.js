@@ -1,12 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  output: 'export', // Enables static export
+  trailingSlash: true, // Ensures correct routing
+  images: { unoptimized: true }, // Required for static exports
+  reactStrictMode: true,
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: false,
   },
-  images: { unoptimized: true },
-  reactStrictMode: false, // Disable Strict Mode
-
 };
 
 module.exports = nextConfig;
