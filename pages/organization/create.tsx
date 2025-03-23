@@ -7,18 +7,19 @@ import { Button } from '@/components/ui/button';
 import { createOrganization } from '@/features/organization/organizationActions';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/redux/store';
+import SecureStorage from '@/utils/SecureStorage';
 
 const CreateOrganization = () => {
   const dispatch= useDispatch<AppDispatch>()
   const [organizationName, setOrganizationName] = useState('');
-  const [organizationKey, setOrganizationKey] = useState('');
+  const [organizationKey, setOrganizationKey] = useState('hardcode');
   const [organizationDesc, setOrganizationDesc] = useState<any>('');
   const [organizationImage, setOrganizationImage] = useState<any>(null);
-
+  const decoded: any= SecureStorage.getItem('decoded')
   const handleImageChange = (e:any) => {
     const file = e.target.files[0];
     if (file) {
-      organizationImage(URL.createObjectURL(file));
+      setOrganizationImage(URL.createObjectURL(file));
     }
   };
 
@@ -29,11 +30,10 @@ const CreateOrganization = () => {
       return;
     }
     const body={
-      organizationName,
+    organizationName,
     organizationKey,
-    
     organizationDesc,
-    organizationAdmin: '',
+    organizationAdmin: decoded?.email,
     organizationProfilePic: organizationImage,
     }
     await dispatch(createOrganization(body))
