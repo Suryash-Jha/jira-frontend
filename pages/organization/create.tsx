@@ -16,10 +16,19 @@ const CreateOrganization = () => {
   const [organizationDesc, setOrganizationDesc] = useState<any>('');
   const [organizationImage, setOrganizationImage] = useState<any>(null);
   const decoded: any= SecureStorage.getItem('decoded')
+  const encodeImageFileAsURL= (element:any) =>{
+    var file = element;
+    var reader = new FileReader();
+    reader.onloadend = function() {
+      setOrganizationImage(reader.result);
+    }
+    reader.readAsDataURL(file);
+  }
+
   const handleImageChange = (e:any) => {
     const file = e.target.files[0];
     if (file) {
-      setOrganizationImage(URL.createObjectURL(file));
+      encodeImageFileAsURL(file)
     }
   };
 
@@ -37,7 +46,6 @@ const CreateOrganization = () => {
     organizationProfilePic: organizationImage,
     }
     await dispatch(createOrganization(body))
-    toast.success("Organization created successfully!");
     setOrganizationName('');
     setOrganizationDesc('');
     setOrganizationImage(null);
