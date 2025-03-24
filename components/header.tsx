@@ -25,10 +25,21 @@ export function Header() {
 
   const [organization, setOrganization] = useState<any>('');
   const decoded: any = SecureStorage.getItem('decoded')
+  const selectedOrganization: any = SecureStorage.getItem('selectedOrganization')
   console.log(decoded, '----+++_decoded')
   useEffect(() => {
+    if (organization) {
+      SecureStorage.setItem('selectedOrganization', organization)
+    }
+  }, [organization])
+
+  useEffect(() => {
+    if(selectedOrganization) setOrganization(selectedOrganization)
     dispatch(getOrganizationList(''))
   }, [])
+  useEffect(() => {
+    if(organizationList && organizationList.length< 1) window.location.href='/orgnaization/create'
+  }, [organizationList])
 
   console.log(organizationList, '--->')
 
@@ -48,16 +59,14 @@ export function Header() {
             onChange={(e: any, newValue: any) => setOrganization(newValue)}>
             {organizationList && organizationList.length > 0 && organizationList.map((data: any, i: any) => {
               return <Option value={data?._id}>
-                {/* <img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUA
-    AAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO
-        9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Red dot" /> */}
-                <img 
-                style={{
-                  height: '2vh',
-                  width: '2vh',
-                  borderRadius: '50%'
-                }}
-                src={data && data.organizationProfilePic && data?.organizationProfilePic} /> 
+                {selectedOrganization === data?.organizationName && <img src="data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==" alt="Red dot" />}
+                <img
+                  style={{
+                    height: '2vh',
+                    width: '2vh',
+                    borderRadius: '50%'
+                  }}
+                  src={data && data.organizationProfilePic && data?.organizationProfilePic} />
                 {data?.organizationName}
               </Option>
             })
