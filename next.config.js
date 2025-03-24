@@ -3,7 +3,7 @@ const nextConfig = {
   output: 'export', // Enables static export
   trailingSlash: true, // Ensures correct routing
   images: { unoptimized: true }, // Required for static exports
-  reactStrictMode: true,
+  reactStrictMode: false,
   eslint: {
     ignoreDuringBuilds: false,
   },

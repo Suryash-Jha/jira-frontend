@@ -38,7 +38,7 @@ export function Header() {
     dispatch(getOrganizationList(''))
   }, [])
   useEffect(() => {
-    if(organizationList && organizationList.length< 1) window.location.href='/orgnaization/create'
+    if(organizationList && organizationList.length< 1) window.location.href='/organization/create'
   }, [organizationList])
 
   console.log(organizationList, '--->')

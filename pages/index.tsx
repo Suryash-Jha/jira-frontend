@@ -36,7 +36,9 @@ export default function Home() {
        
         />
       </div>
-        <ToastContainer />
+        <ToastContainer 
+        position='bottom-right'
+        />
     </Layout>
   )
 }

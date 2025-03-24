@@ -49,6 +49,7 @@ const CreateOrganization = () => {
     setOrganizationName('');
     setOrganizationDesc('');
     setOrganizationImage(null);
+    window.location.href='/'
   };
 
   return (
@@ -93,7 +94,7 @@ const CreateOrganization = () => {
           </Button>
         </form>
       </div>
-      <ToastContainer position="top-center" autoClose={3000} theme="dark" />
+      <ToastContainer/>
     </div>
   );
 };
