@@ -33,10 +33,9 @@ const organizationSlice = createSlice({
         state.error = null;
       })
       .addCase(
-        getOrganizationList.fulfilled,(state,action: PayloadAction<any>,
-        ) => {
+        getOrganizationList.fulfilled,(state,action: PayloadAction<any>) => {
           state.loading = false;
-          state.orgnizationList= action.payload;
+          state.organizationList= action.payload;
         },
       )
       .addCase(getOrganizationList.rejected, (state, action) => {

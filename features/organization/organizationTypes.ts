@@ -1,6 +1,6 @@
 
 export interface OrganizationState {
-  orgnizationList: any;
+  organizationList: any;
   loading: boolean; 
   error: string | null; 
   
@@ -8,7 +8,7 @@ export interface OrganizationState {
 
 // Initial state for the auth slice
 export const initialState: OrganizationState = {
-  orgnizationList: [],
+  organizationList: [],
     loading: false,
     error: '' 
 };
