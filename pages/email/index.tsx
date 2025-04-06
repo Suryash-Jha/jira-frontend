@@ -4,6 +4,15 @@ import { Box, Button,  CssBaseline, CssVarsProvider, Input, Stack, Step, stepCla
 import React, {useState} from 'react';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import { z } from "zod";
+
+const EmailBody = z.object({
+  toEmail: z.string().email(),
+  subject: z.string().min(15).max(30),
+  content: z.string().max(200),
+  attachments: z.string().optional(),
+});
+
 
 const StepperComp = ({activeTab}: any) => {
   return (
@@ -30,26 +39,38 @@ const StepperComp = ({activeTab}: any) => {
     </Stepper>
   )
 }
-const QuestionForm = ({activeTab}:any) => {
+const QuestionForm = ({activeTab, formData, setFormData}:any) => {
+  const handleChange= (e:any) =>{
+    const name= e.target.name;
+    const value= e.target.value;
+    setFormData((prev:any)=>({ ...prev, [name]: value}) )
+  }
+  console.log(formData)
   const getQuestionContent= (activeTab:any)=>{
     console.log(activeTab, "activeTab")
     switch (Number(activeTab)){
       case 1: return(
         <>
         <Typography level='h3'> Enter the Email Address to send mail to</Typography>
-        <Input name='toEmail' placeholder='Enter Mail ID'> </Input> 
+        <Input 
+        name='toEmail' 
+        placeholder='Enter Mail ID'
+        value={formData?.toEmail}
+        onChange={handleChange}
+        required
+        > </Input> 
         </>
       )
       case 2: return(
         <>
         <Typography level='h3'> Enter Subject of mail</Typography>
-        <Input name='subject' placeholder='Response Placeholder'> </Input> 
+        <Input name='subject' placeholder='Response Placeholder' onChange={handleChange} required> </Input> 
         </>
       )
       case 3: return(
         <>
         <Typography level='h3'> Enter Mail Content</Typography>
-        <Input name='content' placeholder='Response Placeholder'> </Input> 
+        <Input name='content' placeholder='Response Placeholder' onChange={handleChange} required> </Input> 
         </>
       )
       case 4: return(
@@ -103,6 +124,11 @@ const TabChanger = ({activeTab, setActiveTab}:any) => {
 const index = () => {
   const [activeTab, setActiveTab]= useState<any>(1);
   const [formData, setFormData]= useState<any>({});
+  const handleSubmit=(e:any)=>{
+    e.preventDefault()
+    console.log(EmailBody.safeParse(formData))
+    console.log('formData submitted: ', formData)
+  }
   return (
     <CssVarsProvider>
       <CssBaseline />
@@ -127,7 +153,10 @@ const index = () => {
         }}>
           <Typography level='h1'> Email Form</Typography>
           <StepperComp activeTab={activeTab}/>
-          <QuestionForm activeTab={activeTab} />
+          <form onSubmit={handleSubmit} style={{width: '80%', height: '60%'}}>
+
+          <QuestionForm activeTab={activeTab} setFormData={setFormData} formData={formData}/>
+          </form>
           <TabChanger setActiveTab={setActiveTab} activeTab={activeTab}/>
 
 
