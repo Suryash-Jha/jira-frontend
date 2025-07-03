@@ -46,7 +46,7 @@ export default function AuthPage() {
         toast.error("Login failed!");
       }
     } catch (err: any) {
-      toast.error("Login error: " + err.message);
+      console.log("Login error: " + err.message);
     } finally {
       setIsLoggingIn(false);
     }

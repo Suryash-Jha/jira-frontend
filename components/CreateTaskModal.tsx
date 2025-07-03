@@ -14,13 +14,7 @@ interface Props {
   setIsOpen: any;
 
 }
-const dummyUsers = [
-  { name: "Alice Smith", email: "alice@example.com", avatar: "https://i.pravatar.cc/150?u=alice" },
-  { name: "Bob Johnson", email: "bob@example.com", avatar: "https://i.pravatar.cc/150?u=bob" },
-  { name: "Charlie Brown", email: "charlie@example.com", avatar: "https://i.pravatar.cc/150?u=charlie" },
-  { name: "Daisy Ray", email: "daisy@example.com", avatar: "https://i.pravatar.cc/150?u=daisy" },
-  { name: "Ethan Hunt", email: "ethan@example.com", avatar: "https://i.pravatar.cc/150?u=ethan" },
-];
+
 const CreateTaskModal: React.FC<Props> = ({
   isOpen,
   setIsOpen,
@@ -32,6 +26,18 @@ const CreateTaskModal: React.FC<Props> = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  
+    const decoded: any = SecureStorage.getItem('decoded')
+    const userEmail=   decoded?.email
+    const userName=   decoded?.name
+
+  const dummyUsers = [
+  {name: userName, email: userEmail, avatar: "https://i.pravatar.cc/150?u=alice" },
+  { name: "Bob Johnson", email: "bob@example.com", avatar: "https://i.pravatar.cc/150?u=bob" },
+  { name: "Charlie Brown", email: "charlie@example.com", avatar: "https://i.pravatar.cc/150?u=charlie" },
+  { name: "Daisy Ray", email: "daisy@example.com", avatar: "https://i.pravatar.cc/150?u=daisy" },
+  { name: "Ethan Hunt", email: "ethan@example.com", avatar: "https://i.pravatar.cc/150?u=ethan" },
+];
 
   const filteredUsers = dummyUsers.filter((user) =>
     user.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -88,7 +94,7 @@ const CreateTaskModal: React.FC<Props> = ({
     const updatedFormData = {
       ...prevFormData,
       createdByEmail: decoded?.email,
-      createdBy: decoded?.fullName,
+      createdBy: decoded?.name,
       assignedToEmail: selectedUsers.join(", "),
       assignedTo: selectedUsers
         .map(email => dummyUsers.find(user => user.email === email)?.name)
