@@ -26,21 +26,21 @@ const CreateTaskModal: React.FC<Props> = ({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
-  
-    const decoded: any = SecureStorage.getItem('decoded')
-    const userEmail=   decoded?.email
-    const userName=   decoded?.name
 
+  const decoded: any = SecureStorage.getItem('decoded')
+  const userEmail = decoded?.email
+  const userName = decoded?.fullName
+// console.log
   const dummyUsers = [
-  {name: userName, email: userEmail, avatar: "https://i.pravatar.cc/150?u=alice" },
-  { name: "Bob Johnson", email: "bob@example.com", avatar: "https://i.pravatar.cc/150?u=bob" },
-  { name: "Charlie Brown", email: "charlie@example.com", avatar: "https://i.pravatar.cc/150?u=charlie" },
-  { name: "Daisy Ray", email: "daisy@example.com", avatar: "https://i.pravatar.cc/150?u=daisy" },
-  { name: "Ethan Hunt", email: "ethan@example.com", avatar: "https://i.pravatar.cc/150?u=ethan" },
-];
+    { name: userName, email: userEmail, avatar: "https://i.pravatar.cc/150?u=alice" },
+    { name: "Bob Johnson", email: "bob@example.com", avatar: "https://i.pravatar.cc/150?u=bob" },
+    { name: "Charlie Brown", email: "charlie@example.com", avatar: "https://i.pravatar.cc/150?u=charlie" },
+    { name: "Daisy Ray", email: "daisy@example.com", avatar: "https://i.pravatar.cc/150?u=daisy" },
+    { name: "Ethan Hunt", email: "ethan@example.com", avatar: "https://i.pravatar.cc/150?u=ethan" },
+  ];
 
   const filteredUsers = dummyUsers.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase())
+    user?.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Close dropdown when clicking outside
@@ -94,7 +94,7 @@ const CreateTaskModal: React.FC<Props> = ({
     const updatedFormData = {
       ...prevFormData,
       createdByEmail: decoded?.email,
-      createdBy: decoded?.name,
+      createdBy: decoded?.fullName,
       assignedToEmail: selectedUsers.join(", "),
       assignedTo: selectedUsers
         .map(email => dummyUsers.find(user => user.email === email)?.name)
@@ -232,6 +232,7 @@ const CreateTaskModal: React.FC<Props> = ({
                       className="border p-2 rounded-lg min-h-[3rem] cursor-pointer bg-white text-black"
                     >
                       <div className="flex flex-wrap gap-2">
+
                         {selectedUsers.length > 0 ? (
                           selectedUsers.map((email) => {
                             const user = dummyUsers.find((u) => u.email === email);
