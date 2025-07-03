@@ -49,7 +49,47 @@ export const ProjectBoard: React.FC<Props> = ({
   const transformTasks = (apiTasks: any) => {
     console.log(apiTasks, '---->apitask')
     const columnsMap: any = {};
-    const status = ['todo', 'in-progress', 'done']
+    // const status = ['CR', 'CR-Review', 'CR-Approval-In-Progress', 'todo', 'in-progress', 'done' ]
+   const status = [
+  // Strategic & Business Alignment
+  'Idea',
+  'Proposal',
+  'CR',
+  // Management Approval & Planning
+  'CR-Review',
+  'Approved',
+  'Rejected',
+  'Backlog',
+  'Planned',
+ 
+  // Design & Requirement Finalization
+  'Requirements-Gathering',
+  'Design',
+  'Design-Review',
+ 
+  // Development Cycle
+  'todo',
+  'in-progress',
+  'in-review',
+  'rework',
+ 
+  // QA & Testing
+  'qa',
+  'uat',
+  'bug-fix',
+ 
+  // Deployment & Release
+  'ready-for-release',
+  'released',
+ 
+  // Closure
+  'done',
+  'archived',
+ 
+  // Optional
+  'blocked',
+  'on-hold'
+];
     status.map((item) => {
       columnsMap[item] = {
         id: item,
