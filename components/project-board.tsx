@@ -47,6 +47,7 @@ export const ProjectBoard: React.FC<Props> = ({
   const [activeId, setActiveId] = useState<string | null>(null)
 
   const transformTasks = (apiTasks: any) => {
+    console.log(apiTasks, '---->apitask')
     const columnsMap: any = {};
     const status = ['todo', 'in-progress', 'done']
     status.map((item) => {
